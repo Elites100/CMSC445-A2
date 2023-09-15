@@ -1,2 +1,2 @@
-# CMSC445-A2
-Product and Customer services deployed on render --> Assignment 2
+# CMSC445-ProductService
+Product services deployed on render --> Assignment 2
