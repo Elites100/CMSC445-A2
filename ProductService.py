@@ -42,6 +42,38 @@ def create_product():
   }
   products.append(new_product)
   return jsonify({"message": "Product created", "Product": new_product}), 201
+
+# Endpoint 4: Deleting a product
+@app.route('/products/remove/<int:product_id>', methods=['POST'])
+def remove_product(product_id):
+
+  # Find the product in the Sample product data list
+  product_index = None
+  for i, product in enumerate(products):
+    if product['id'] == product_id:
+      product_index = i
+      break
+
+  if product_index is None:
+    return jsonify({"error": "Product not found"}), 404
+  
+  # specify the amount to remove or default to 1
+  remove_quantity = request.json.get('quantity', 1)
+
+  if remove_quantity <= 0:
+    return jsonify({"error": "Invalid quantity"}), 400
+
+  if products[product_index]['quantity'] < remove_quantity:
+    return jsonify({"error": "Insufficient quantity"}), 400
+  
+  # Subtract the quantity from the Sample product data by ID
+  products[product_index]['quantity'] -= remove_quantity
+
+  # If quantity becomes 0, you can remove the product from the list
+  if products[product_index]['quantity'] == 0:
+    del products[product_index]
+  
+  return jsonify({"message": "Quantity removed", "Product": products[product_index]}), 200
  
 
 if __name__ == '__main__':
